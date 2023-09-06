@@ -28,7 +28,8 @@ async function registration(req, res, next){
     const hashedPassword = await bcrypt.hash(password, 5)
     const user = await User.create({email, role, password: hashedPassword})
     const basket = await Basket.create({userId: user.id})
-    const jwtToken = generateToken(user.id, email, role)
+    let token = generateToken(user.id, email, role)
+    token = "Bearer " + token
     return res.json({token: jwtToken})
 }
 
@@ -43,9 +44,9 @@ async function login(req, res, next){
     if(!isPasswordCorrect){
         return next(ApiError.badRequest("Email или пароль указаны неверно"))
     }
-    const token = generateToken(user.id, user.mail, user.role)
-
-    return res.json({token})
+    let token = generateToken(user.id, user.mail, user.role)
+    token = "Bearer " + token
+    return res.json({token: token})
 }
 
 async function check(req, res, next){
