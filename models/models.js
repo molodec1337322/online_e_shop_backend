@@ -73,7 +73,7 @@ const Type = sequelize.define('type', {
     },
 })
 
-const Brand = sequelize.define('Brand', {
+const Brand = sequelize.define('brand', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
