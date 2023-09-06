@@ -32,16 +32,24 @@ async function registration(req, res, next){
     return res.json({token: jwtToken})
 }
 
-async function login(req, res){
+async function login(req, res, next){
+    const {email, password} = req.body
+    const user = await User.findOne({where: {email}})
+    if(!user){
+        return next(ApiError.badRequest("Email или пароль указаны неверно"))
+    }
 
+    let isPasswordCorrect = bcrypt.compareSync(password, user.password)
+    if(!isPasswordCorrect){
+        return next(ApiError.badRequest("Email или пароль указаны неверно"))
+    }
+    const token = generateToken(user.id, user.mail, user.role)
+
+    return res.json({token})
 }
 
 async function check(req, res, next){
-    const {id} = req.query
-    if(!id){
-        return next(ApiError.badRequest("no id"))
-    }
-    res.json('dsgsdgsfdg')
+
 }
 
 module.exports = {
