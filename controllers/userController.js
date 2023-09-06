@@ -50,7 +50,9 @@ async function login(req, res, next){
 }
 
 async function check(req, res, next){
-
+    let token = generateToken(req.user.id, req.user.email, req.user.role)
+    token = "Bearer " + token
+    return res.json({token: token})
 }
 
 module.exports = {
